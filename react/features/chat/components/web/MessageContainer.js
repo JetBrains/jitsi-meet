@@ -2,13 +2,12 @@
 
 import React from 'react';
 
+import UIUtil from '../../../../../modules/UI/util/UIUtil';
 import { MESSAGE_TYPE_REMOTE } from '../../constants';
 import AbstractMessageContainer, { type Props }
     from '../AbstractMessageContainer';
 
 import ChatMessageGroup from './ChatMessageGroup';
-
-declare var interfaceConfig: Object;
 
 /**
  * Displays all received chat messages, grouped by sender.
@@ -72,7 +71,7 @@ export default class MessageContainer extends AbstractMessageContainer<Props> {
 
         return (
             <div
-                className = { interfaceConfig.CHAT_ON_THE_LEFT
+                className = { UIUtil.shouldUseChatOnTheLeftSide()
                     ? 'chatconversation-vertical'
                     : 'chatconversation-horizontal' }
                 id = 'chatconversation'

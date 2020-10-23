@@ -4,10 +4,12 @@
     <meta charset="utf-8">
     <meta http-equiv="content-type" content="text/html;charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2A3A4B">
     <!--#include virtual="base.html" -->
 
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
     <link rel="stylesheet" href="css/all.css">
+    <link rel="manifest" href="static/pwa/manifest.json">
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             if (!JitsiMeetJS.app) {
@@ -17,7 +19,21 @@
             JitsiMeetJS.app.renderEntryPoint({
                 Component: JitsiMeetJS.app.entryPoints.APP
             })
-        })
+
+            const isElectron = navigator.userAgent.includes('Electron');
+            const shouldRegisterWorker = !isElectron && 'serviceWorker' in navigator;
+
+            if (shouldRegisterWorker) {
+                navigator.serviceWorker
+                    .register('/pwa-worker.js')
+                    .then(reg => {
+                        console.log('Service worker registered.', reg);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            }
+        });
     </script>
     <script>
         // IE11 and earlier can be identified via their user agent and be
@@ -164,6 +180,9 @@
     <!--#include virtual="static/settingsToolbarAdditionalContent.html" -->
   </head>
   <body>
+    <noscript>
+        <div>JavaScript is disabled. </br>For this site to work you have to enable JavaScript.</div>
+    </noscript>
     <!--#include virtual="body.html" -->
     <div id="react"></div>
   </body>

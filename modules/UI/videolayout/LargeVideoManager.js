@@ -1,4 +1,4 @@
-/* global $, APP, interfaceConfig */
+/* global $, APP */
 /* eslint-disable no-unused-vars */
 import Logger from 'jitsi-meet-logger';
 import React from 'react';
@@ -359,29 +359,17 @@ export default class LargeVideoManager {
         let widthToUse = this.preferredWidth || window.innerWidth;
         let heightToUse = this.preferredHeight || window.innerHeight;
 
-        const { isOpen } = APP.store.getState()['features/chat'];
+        const { isOpen, onTheLeft } = APP.store.getState()['features/chat'];
 
-        /**
-         * If chat state is open, we re-compute the container width by subtracting the default width of
-         * the chat. We re-compute the width again after the chat window is closed. This is needed when
-         * custom styling is configured on the large video container through the iFrame API.
-         */
-        if (interfaceConfig.CHAT_ON_THE_LEFT) {
-            if (isOpen && !this.resizedForChat) {
+        if (isOpen) {
+            /**
+             * If chat state is open, we re-compute the container width
+             * by subtracting the default width of the chat.
+             */
+            if (onTheLeft) {
                 widthToUse -= CHAT_SIZE_WIDTH;
-                this.resizedForChat = true;
-            } else if (!isOpen && this.resizedForChat) {
-                this.resizedForChat = false;
-                widthToUse += CHAT_SIZE_WIDTH;
-            }
-        } else {
-            // eslint-disable-next-line no-lonely-if
-            if (isOpen && !this.resizedForChat) {
+            } else {
                 heightToUse -= CHAT_SIZE_HEIGHT;
-                this.resizedForChat = true;
-            } else if (!isOpen && this.resizedForChat) {
-                this.resizedForChat = false;
-                heightToUse += CHAT_SIZE_HEIGHT;
             }
         }
 

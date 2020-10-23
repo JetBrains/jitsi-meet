@@ -33,6 +33,11 @@ type Props = {
     _isChatOpen: boolean,
 
     /**
+     * Prop that indicates whether the chat is on the left or at the bottom.
+     */
+    _isChatOnTheLeft: boolean,
+
+    /**
      * Used to determine the value of the autoplay attribute of the underlying
      * video element.
      */
@@ -64,7 +69,7 @@ class LargeVideo extends Component<Props> {
     render() {
         const style = this._getCustomSyles();
         const className = `videocontainer${this.props._isChatOpen
-            ? interfaceConfig.CHAT_ON_THE_LEFT ? ' shift-right'
+            ? this.props._isChatOnTheLeft ? ' shift-right'
                 : ' shift-up' : ''}`;
 
         return (
@@ -144,12 +149,13 @@ class LargeVideo extends Component<Props> {
 function _mapStateToProps(state) {
     const testingConfig = state['features/base/config'].testing;
     const { backgroundColor, backgroundImageUrl } = state['features/dynamic-branding'];
-    const { isOpen: isChatOpen } = state['features/chat'];
+    const { isOpen: isChatOpen, onTheLeft: isChatOnTheLeft } = state['features/chat'];
 
     return {
         _customBackgroundColor: backgroundColor,
         _customBackgroundImageUrl: backgroundImageUrl,
         _isChatOpen: isChatOpen,
+        _isChatOnTheLeft: isChatOnTheLeft,
         _noAutoPlayVideo: testingConfig?.noAutoPlayVideo
     };
 }

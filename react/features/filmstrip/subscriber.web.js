@@ -1,4 +1,3 @@
-
 // @flow
 
 import Filmstrip from '../../../modules/UI/videolayout/Filmstrip';
@@ -7,8 +6,6 @@ import { StateListenerRegistry, equals } from '../base/redux';
 import { getCurrentLayout, getTileViewGridDimensions, shouldDisplayTileView, LAYOUTS } from '../video-layout';
 
 import { setHorizontalViewDimensions, setTileViewDimensions } from './actions.web';
-
-declare var interfaceConfig: Object;
 
 /**
  * Listens for changes in the number of participants to calculate the dimensions of the tile view grid and the tiles.
@@ -100,7 +97,7 @@ StateListenerRegistry.register(
     /* selector */ state => state['features/chat'].isOpen,
     /* listener */ (isChatOpen, store) => {
         const state = store.getState();
-        const shiftClass = interfaceConfig.CHAT_ON_THE_LEFT
+        const shiftClass = state['features/chat'].onTheLeft
             ? 'shift-right' : 'shift-up';
 
         if (isChatOpen) {

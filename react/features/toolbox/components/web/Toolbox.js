@@ -33,6 +33,7 @@ import {
 import { connect, equals } from '../../../base/redux';
 import { OverflowMenuItem } from '../../../base/toolbox/components';
 import { getLocalVideoTrack, toggleScreensharing } from '../../../base/tracks';
+import { isVpaasMeeting } from '../../../billing-counter/functions';
 import { VideoBlurButton } from '../../../blur';
 import { CHAT_SIZE_WIDTH, ChatCounter, toggleChat } from '../../../chat';
 import { EmbedMeetingDialog } from '../../../embed-meeting';
@@ -96,6 +97,11 @@ type Props = {
     _chatOpen: boolean,
 
     /**
+     * Whether or not the chat feature is currently displayed.
+     */
+    _chatOnTheLeft: boolean,
+
+    /**
      * The {@code JitsiConference} for the current conference.
      */
     _conference: Object,
@@ -135,6 +141,11 @@ type Props = {
      * Whether or not the current user is logged in through a JWT.
      */
     _isGuest: boolean,
+
+    /**
+     * Whether or not the current meeting belongs to a JaaS user.
+     */
+    _isVpaasMeeting: boolean,
 
     /**
      * The ID of the local participant.
@@ -356,7 +367,7 @@ class Toolbox extends Component<Props, State> {
         const { _chatOpen, _visible, _visibleButtons } = this.props;
         const rootClassNames = `new-toolbox ${_visible ? 'visible' : ''} ${
             _visibleButtons.size ? '' : 'no-buttons'} ${_chatOpen
-            ? interfaceConfig.CHAT_ON_THE_LEFT ? 'shift-right'
+            ? this.props._chatOnTheLeft ? 'shift-right'
                 : 'shift-up' : ''}`;
 
         return (
@@ -558,7 +569,7 @@ class Toolbox extends Component<Props, State> {
         let widthToUse = window.innerWidth;
 
         // Take chat size into account when resizing toolbox.
-        if (this.props._chatOpen) {
+        if (this.props._chatOpen && this.props._chatOnTheLeft) {
             widthToUse -= CHAT_SIZE_WIDTH;
         }
 
@@ -978,6 +989,15 @@ class Toolbox extends Component<Props, State> {
      *
      * @returns {boolean}
      */
+    _isEmbedMeetingVisible() {
+        return !this.props._isVpaasMeeting && this._shouldShowButton('embedmeeting');
+    }
+
+    /**
+     * Returns true if the profile button is visible and false otherwise.
+     *
+     * @returns {boolean}
+     */
     _isProfileVisible() {
         return this.props._isGuest && this._shouldShowButton('profile');
     }
@@ -1049,7 +1069,7 @@ class Toolbox extends Component<Props, State> {
                     key = 'stats'
                     onClick = { this._onToolbarOpenSpeakerStats }
                     text = { t('toolbar.speakerStats') } />,
-            this._shouldShowButton('embedmeeting')
+            this._isEmbedMeetingVisible()
                 && <OverflowMenuItem
                     accessibilityLabel = { t('toolbar.accessibilityLabel.embedMeeting') }
                     icon = { IconCodeBlock }
@@ -1429,12 +1449,14 @@ function _mapStateToProps(state) {
 
     return {
         _chatOpen: state['features/chat'].isOpen,
+        _chatOnTheLeft: state['features/chat'].onTheLeft,
         _conference: conference,
         _desktopSharingEnabled: desktopSharingEnabled,
         _desktopSharingDisabledTooltipKey: desktopSharingDisabledTooltipKey,
         _dialog: Boolean(state['features/base/dialog'].component),
         _feedbackConfigured: Boolean(callStatsID),
         _isGuest: state['features/base/jwt'].isGuest,
+        _isVpaasMeeting: isVpaasMeeting(state),
         _fullScreen: fullScreen,
         _tileViewEnabled: shouldDisplayTileView(state),
         _localParticipantID: localParticipant.id,

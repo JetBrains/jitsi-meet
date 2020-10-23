@@ -171,6 +171,7 @@ const config = {
     ].filter(Boolean),
     resolve: {
         alias: {
+            'focus-visible': 'focus-visible/dist/focus-visible.min.js',
             jquery: `jquery/dist/jquery${minimize ? '.min' : ''}.js`
         },
         aliasFields: [
@@ -277,7 +278,7 @@ module.exports = [
             library: 'JitsiMeetExternalAPI',
             libraryTarget: 'umd'
         }),
-        performance: getPerformanceHints(30 * 1024)
+        performance: getPerformanceHints(35 * 1024)
     })
 ];
 
