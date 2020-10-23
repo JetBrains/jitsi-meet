@@ -12,8 +12,10 @@ import {
 } from './actionTypes';
 import { CHAT_VIEW_MODAL_ID } from './constants';
 
+declare var interfaceConfig: Object;
+
 const DEFAULT_STATE = {
-    isOpen: false,
+    isOpen: interfaceConfig.CHAT_STARTS_OPEN,
     onTheLeft: UIUtil.shouldUseChatOnTheLeftSide(),
     lastReadMessage: undefined,
     messages: [],

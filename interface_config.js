@@ -18,13 +18,6 @@ var interfaceConfig = {
     BRAND_WATERMARK_LINK: '',
 
     /**
-     * Whether the chat component will be on the left or bottom part
-     * of the screen
-     * @type {boolean}
-     */
-    CHAT_ON_THE_LEFT: true,
-
-    /**
      * Whether the chat component will be opened by default or not.
      * @type {boolean}
      */
