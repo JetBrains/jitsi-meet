@@ -194,6 +194,12 @@ class Chat extends AbstractChat<Props> {
 
         let className = '';
 
+        if (this.props._onTheLeft) {
+            className = 'sideToolbarContainer';
+        } else {
+            className = 'bottomToolbarContainer';
+        }
+
         if (_isOpen) {
             className += ' slideInExt';
         } else if (this._isExited) {
