@@ -1,4 +1,6 @@
 /**
  * Deploy-specific configuration whitelists
  */
-export default [];
+export default [
+    'deploymentInfo'
+];
