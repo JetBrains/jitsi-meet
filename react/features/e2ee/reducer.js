@@ -5,7 +5,7 @@ import { ReducerRegistry } from '../base/redux';
 import { TOGGLE_E2EE } from './actionTypes';
 
 const DEFAULT_STATE = {
-    enabled: false
+    enabled: true
 };
 
 /**
